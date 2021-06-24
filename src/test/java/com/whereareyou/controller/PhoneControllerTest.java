@@ -124,12 +124,12 @@ public class PhoneControllerTest {
         mockMvc.perform(MockMvcRequestBuilders.get(PHONE_API_URL_PATH)
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].name", is(phoneDTO.getNumber())))
-                .andExpect(jsonPath("$[0].brand", is(phoneDTO.getData())));
+                .andExpect(jsonPath("$[0].number", is(phoneDTO.getNumber())))
+                .andExpect(jsonPath("$[0].data", is(phoneDTO.getData())));
     }
 
     @Test
-    void whenGETListWithoutBeersIsCalledThenOkStatusIsReturned() throws Exception {
+    void whenGETListWithoutPhonesIsCalledThenOkStatusIsReturned() throws Exception {
         // given
         PhoneDTO phoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
 

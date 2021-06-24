@@ -30,7 +30,7 @@ public class PhoneService {
     }
 
     public PhoneDTO findByNumber(String number) throws PhonerNotFoundException {
-        Phone foundPhone = phoneRepository.findByName(number)
+        Phone foundPhone = phoneRepository.findByNumber(number)
                 .orElseThrow(() -> new PhonerNotFoundException(number));
         return phoneMapper.toDTO(foundPhone);
     }
@@ -48,7 +48,7 @@ public class PhoneService {
     }
 
     private void verifyIfIsAlreadyRegistered(String name) throws PhoneAlreadyRegisteredException {
-        Optional<Phone> optSavedPhone = phoneRepository.findByName(name);
+        Optional<Phone> optSavedPhone = phoneRepository.findByNumber(name);
         if (optSavedPhone.isPresent()) {
             throw new PhoneAlreadyRegisteredException(name);
         }

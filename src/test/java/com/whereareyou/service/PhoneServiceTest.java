@@ -6,7 +6,6 @@ import com.whereareyou.exception.PhoneAlreadyRegisteredException;
 import com.whereareyou.exception.PhonerNotFoundException;
 import com.whereareyou.mapper.PhoneMapper;
 import com.whereareyou.builder.PhoneDTOBuilder;
-import com.whereareyou.exception.PhoneStockExceededException;
 import com.whereareyou.repository.PhoneRepository;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,7 +20,6 @@ import java.util.Optional;
 import static org.hamcrest.MatcherAssert.assertThat;
 import static org.hamcrest.Matchers.*;
 import static org.hamcrest.Matchers.equalTo;
-import static org.hamcrest.Matchers.lessThan;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -34,7 +32,7 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class PhoneServiceTest {
 
-    private static final long INVALID_BEER_ID = 1L;
+    private static final long INVALID_PHONE_ID = 1L;
 
     @Mock
     private PhoneRepository phoneRepository;
@@ -45,13 +43,13 @@ public class PhoneServiceTest {
     private PhoneService phoneService;
 
     @Test
-    void whenBeerInformedThenItShouldBeCreated() throws PhoneAlreadyRegisteredException {
+    void whenPhoneInformedThenItShouldBeCreated() throws PhoneAlreadyRegisteredException {
         // given
         PhoneDTO expectedPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
         Phone expectedSavedPhone = phoneMapper.toModel(expectedPhoneDTO);
 
         // when
-        when(phoneRepository.findByName(expectedPhoneDTO.getNumber())).thenReturn(Optional.empty());
+        when(phoneRepository.findByNumber(expectedPhoneDTO.getNumber())).thenReturn(Optional.empty());
         when(phoneRepository.save(expectedSavedPhone)).thenReturn(expectedSavedPhone);
 
         //then
@@ -62,26 +60,26 @@ public class PhoneServiceTest {
     }
 
     @Test
-    void whenAlreadyRegisteredBeerInformedThenAnExceptionShouldBeThrown() {
+    void whenAlreadyRegisteredPhoneInformedThenAnExceptionShouldBeThrown() {
         // given
         PhoneDTO expectedPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
         Phone duplicatedPhone = phoneMapper.toModel(expectedPhoneDTO);
 
         // when
-        when(phoneRepository.findByName(expectedPhoneDTO.getNumber())).thenReturn(Optional.of(duplicatedPhone));
+        when(phoneRepository.findByNumber(expectedPhoneDTO.getNumber())).thenReturn(Optional.of(duplicatedPhone));
 
         // then
         assertThrows(PhoneAlreadyRegisteredException.class, () -> phoneService.createPhone(expectedPhoneDTO));
     }
 
     @Test
-    void whenValidBeerNameIsGivenThenReturnABeer() throws PhonerNotFoundException {
+    void whenValidPhoneNumberIsGivenThenReturnAPhone() throws PhonerNotFoundException {
         // given
         PhoneDTO expectedFoundPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
         Phone expectedFoundPhone = phoneMapper.toModel(expectedFoundPhoneDTO);
 
         // when
-        when(phoneRepository.findByName(expectedFoundPhone.getName())).thenReturn(Optional.of(expectedFoundPhone));
+        when(phoneRepository.findByNumber(expectedFoundPhone.getNumber())).thenReturn(Optional.of(expectedFoundPhone));
 
         // then
         PhoneDTO foundPhoneDTO = phoneService.findByNumber(expectedFoundPhoneDTO.getNumber());
@@ -90,19 +88,19 @@ public class PhoneServiceTest {
     }
 
     @Test
-    void whenNotRegisteredBeerNameIsGivenThenThrowAnException() {
+    void whenNotRegisteredPhoneNameIsGivenThenThrowAnException() {
         // given
         PhoneDTO expectedFoundPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
 
         // when
-        when(phoneRepository.findByName(expectedFoundPhoneDTO.getNumber())).thenReturn(Optional.empty());
+        when(phoneRepository.findByNumber(expectedFoundPhoneDTO.getNumber())).thenReturn(Optional.empty());
 
         // then
         assertThrows(PhonerNotFoundException.class, () -> phoneService.findByNumber(expectedFoundPhoneDTO.getNumber()));
     }
 
     @Test
-    void whenListBeerIsCalledThenReturnAListOfBeers() {
+    void whenListPhoneIsCalledThenReturnAListOfPhones() {
         // given
         PhoneDTO expectedFoundPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
         Phone expectedFoundPhone = phoneMapper.toModel(expectedFoundPhoneDTO);
@@ -111,14 +109,14 @@ public class PhoneServiceTest {
         when(phoneRepository.findAll()).thenReturn(Collections.singletonList(expectedFoundPhone));
 
         //then
-        List<PhoneDTO> foundListBeersDTO = phoneService.listAll();
+        List<PhoneDTO> foundListPhonesDTO = phoneService.listAll();
 
-        assertThat(foundListBeersDTO, is(not(empty())));
-        assertThat(foundListBeersDTO.get(0), is(equalTo(expectedFoundPhoneDTO)));
+        assertThat(foundListPhonesDTO, is(not(empty())));
+        assertThat(foundListPhonesDTO.get(0), is(equalTo(expectedFoundPhoneDTO)));
     }
 
     @Test
-    void whenListBeerIsCalledThenReturnAnEmptyListOfBeers() {
+    void whenListPhoneIsCalledThenReturnAnEmptyListOfPhones() {
         //when
         when(phoneRepository.findAll()).thenReturn(Collections.EMPTY_LIST);
 
@@ -129,7 +127,7 @@ public class PhoneServiceTest {
     }
 
     @Test
-    void whenExclusionIsCalledWithValidIdThenABeerShouldBeDeleted() throws PhonerNotFoundException {
+    void whenExclusionIsCalledWithValidIdThenAPhoneShouldBeDeleted() throws PhonerNotFoundException {
         // given
         PhoneDTO expectedDeletedPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
         Phone expectedDeletedPhone = phoneMapper.toModel(expectedDeletedPhoneDTO);
