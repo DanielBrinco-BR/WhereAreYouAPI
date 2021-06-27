@@ -21,7 +21,7 @@ public class SwaggerConfig {
     private static final String API_TITLE = "WhereAreYou API";
     private static final String API_DESCRIPTION = "REST API for phone management";
     private static final String CONTACT_NAME = "Daniel Brinco";
-    private static final String CONTACT_GITHUB = "https://gtihub.com/DanielBrinco-BR";
+    private static final String CONTACT_GITHUB = "https://github.com/DanielBrinco-BR";
     private static final String CONTACT_EMAIL = "daniel.brinco@gmail.com";
 
     @Bean

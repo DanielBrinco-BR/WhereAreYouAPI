@@ -1,5 +1,7 @@
 <h2>Projeto de gerenciamento de dados de localização de telefones usando API REST.</h2>
 
+Projeto desenvolvido com base no curso "Digital Innovation: Expert class - Desenvolvimento de testes unitários para validar uma API REST de gerenciamento de estoques de cerveja." com o instrutor Rodrigo Peleias
+
 Para executar o projeto no terminal, digite o seguinte comando:
 
 ```shell script
@@ -27,6 +29,7 @@ São necessários os seguintes pré-requisitos para a execução do projeto dese
 
 Links de referência:
 
+* [Link para o repositório do projeto original criado por Rodrigo Peleias no GitHub](https://github.com/rpeleias/beer_api_digital_innovation_one)
 * [SDKMan! para gerenciamento e instalação do Java e Maven](https://sdkman.io/)
 * [Referência do Intellij IDEA Community, para download](https://www.jetbrains.com/idea/download)
 * [Palheta de atalhos de comandos do Intellij](https://resources.jetbrains.com/storage/products/intellij-idea/docs/IntelliJIDEA_ReferenceCard.pdf)
