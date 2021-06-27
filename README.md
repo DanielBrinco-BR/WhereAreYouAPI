@@ -20,6 +20,12 @@ Após executar o comando acima, basta apenas abrir o seguinte endereço e visual
 http://localhost:8080/api/v1/phones
 ```
 
+Esta API foi publicada no Heroku e está acessível através do link abaixo:
+
+```
+https://kd-vc-api.herokuapp.com/
+```
+
 São necessários os seguintes pré-requisitos para a execução do projeto desenvolvido:
 
 * Java 15 ou versões superiores.
