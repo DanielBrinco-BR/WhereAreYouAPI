@@ -26,6 +26,21 @@ Esta API foi publicada no Heroku e está acessível através do link abaixo:
 https://kd-vc-api.herokuapp.com/
 ```
 
+Exemplo de inclusão de dados (JSON) usando POST:
+
+```
+{
+    "number": "5511954666111",
+    "data": "-23.9998948, -45.111888948, 20.0, 27-06-2021, 09:50:00, 55.0%, HoneyPot, true, 4G"
+}
+```
+
+Exemplo de consulta usando GET:
+
+```
+https://kd-vc-api.herokuapp.com/api/v1/phones?number=5511954666111
+```
+
 São necessários os seguintes pré-requisitos para a execução do projeto desenvolvido:
 
 * Java 15 ou versões superiores.
