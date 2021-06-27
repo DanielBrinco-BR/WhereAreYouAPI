@@ -3,7 +3,7 @@ package com.whereareyou.service;
 import com.whereareyou.dto.PhoneDTO;
 import com.whereareyou.entity.Phone;
 import com.whereareyou.exception.PhoneAlreadyRegisteredException;
-import com.whereareyou.exception.PhonerNotFoundException;
+import com.whereareyou.exception.PhoneNotFoundException;
 import com.whereareyou.mapper.PhoneMapper;
 import com.whereareyou.builder.PhoneDTOBuilder;
 import com.whereareyou.repository.PhoneRepository;
@@ -32,72 +32,13 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 public class PhoneServiceTest {
 
-    private static final long INVALID_PHONE_ID = 1L;
-
     @Mock
     private PhoneRepository phoneRepository;
 
-    private PhoneMapper phoneMapper = PhoneMapper.INSTANCE;
+    private final PhoneMapper phoneMapper = PhoneMapper.INSTANCE;
 
     @InjectMocks
     private PhoneService phoneService;
-
-    @Test
-    void whenPhoneInformedThenItShouldBeCreated() throws PhoneAlreadyRegisteredException {
-        // given
-        PhoneDTO expectedPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
-        Phone expectedSavedPhone = phoneMapper.toModel(expectedPhoneDTO);
-
-        // when
-        when(phoneRepository.findByNumber(expectedPhoneDTO.getNumber())).thenReturn(Optional.empty());
-        when(phoneRepository.save(expectedSavedPhone)).thenReturn(expectedSavedPhone);
-
-        //then
-        PhoneDTO createdPhoneDTO = phoneService.createPhone(expectedPhoneDTO);
-
-        assertThat(createdPhoneDTO.getId(), is(equalTo(expectedPhoneDTO.getId())));
-        assertThat(createdPhoneDTO.getNumber(), is(equalTo(expectedPhoneDTO.getNumber())));
-    }
-
-    @Test
-    void whenAlreadyRegisteredPhoneInformedThenAnExceptionShouldBeThrown() {
-        // given
-        PhoneDTO expectedPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
-        Phone duplicatedPhone = phoneMapper.toModel(expectedPhoneDTO);
-
-        // when
-        when(phoneRepository.findByNumber(expectedPhoneDTO.getNumber())).thenReturn(Optional.of(duplicatedPhone));
-
-        // then
-        assertThrows(PhoneAlreadyRegisteredException.class, () -> phoneService.createPhone(expectedPhoneDTO));
-    }
-
-    @Test
-    void whenValidPhoneNumberIsGivenThenReturnAPhone() throws PhonerNotFoundException {
-        // given
-        PhoneDTO expectedFoundPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
-        Phone expectedFoundPhone = phoneMapper.toModel(expectedFoundPhoneDTO);
-
-        // when
-        when(phoneRepository.findByNumber(expectedFoundPhone.getNumber())).thenReturn(Optional.of(expectedFoundPhone));
-
-        // then
-        PhoneDTO foundPhoneDTO = phoneService.findByNumber(expectedFoundPhoneDTO.getNumber());
-
-        assertThat(foundPhoneDTO, is(equalTo(expectedFoundPhoneDTO)));
-    }
-
-    @Test
-    void whenNotRegisteredPhoneNameIsGivenThenThrowAnException() {
-        // given
-        PhoneDTO expectedFoundPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
-
-        // when
-        when(phoneRepository.findByNumber(expectedFoundPhoneDTO.getNumber())).thenReturn(Optional.empty());
-
-        // then
-        assertThrows(PhonerNotFoundException.class, () -> phoneService.findByNumber(expectedFoundPhoneDTO.getNumber()));
-    }
 
     @Test
     void whenListPhoneIsCalledThenReturnAListOfPhones() {
@@ -127,7 +68,7 @@ public class PhoneServiceTest {
     }
 
     @Test
-    void whenExclusionIsCalledWithValidIdThenAPhoneShouldBeDeleted() throws PhonerNotFoundException {
+    void whenExclusionIsCalledWithValidIdThenAPhoneShouldBeDeleted() throws PhoneNotFoundException {
         // given
         PhoneDTO expectedDeletedPhoneDTO = PhoneDTOBuilder.builder().build().toPhoneDTO();
         Phone expectedDeletedPhone = phoneMapper.toModel(expectedDeletedPhoneDTO);
@@ -142,56 +83,4 @@ public class PhoneServiceTest {
         verify(phoneRepository, times(1)).findById(expectedDeletedPhoneDTO.getId());
         verify(phoneRepository, times(1)).deleteById(expectedDeletedPhoneDTO.getId());
     }
-//
-//    @Test
-//    void whenDecrementIsCalledThenDecrementBeerStock() throws BeerNotFoundException, BeerStockExceededException {
-//        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-//        Beer expectedBeer = beerMapper.toModel(expectedBeerDTO);
-//
-//        when(beerRepository.findById(expectedBeerDTO.getId())).thenReturn(Optional.of(expectedBeer));
-//        when(beerRepository.save(expectedBeer)).thenReturn(expectedBeer);
-//
-//        int quantityToDecrement = 5;
-//        int expectedQuantityAfterDecrement = expectedBeerDTO.getQuantity() - quantityToDecrement;
-//        BeerDTO incrementedBeerDTO = beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement);
-//
-//        assertThat(expectedQuantityAfterDecrement, equalTo(incrementedBeerDTO.getQuantity()));
-//        assertThat(expectedQuantityAfterDecrement, greaterThan(0));
-//    }
-//
-//    @Test
-//    void whenDecrementIsCalledToEmptyStockThenEmptyBeerStock() throws BeerNotFoundException, BeerStockExceededException {
-//        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-//        Beer expectedBeer = beerMapper.toModel(expectedBeerDTO);
-//
-//        when(beerRepository.findById(expectedBeerDTO.getId())).thenReturn(Optional.of(expectedBeer));
-//        when(beerRepository.save(expectedBeer)).thenReturn(expectedBeer);
-//
-//        int quantityToDecrement = 10;
-//        int expectedQuantityAfterDecrement = expectedBeerDTO.getQuantity() - quantityToDecrement;
-//        BeerDTO incrementedBeerDTO = beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement);
-//
-//        assertThat(expectedQuantityAfterDecrement, equalTo(0));
-//        assertThat(expectedQuantityAfterDecrement, equalTo(incrementedBeerDTO.getQuantity()));
-//    }
-//
-//    @Test
-//    void whenDecrementIsLowerThanZeroThenThrowException() {
-//        BeerDTO expectedBeerDTO = BeerDTOBuilder.builder().build().toBeerDTO();
-//        Beer expectedBeer = beerMapper.toModel(expectedBeerDTO);
-//
-//        when(beerRepository.findById(expectedBeerDTO.getId())).thenReturn(Optional.of(expectedBeer));
-//
-//        int quantityToDecrement = 80;
-//        assertThrows(BeerStockExceededException.class, () -> beerService.decrement(expectedBeerDTO.getId(), quantityToDecrement));
-//    }
-//
-//    @Test
-//    void whenDecrementIsCalledWithInvalidIdThenThrowException() {
-//        int quantityToDecrement = 10;
-//
-//        when(beerRepository.findById(INVALID_BEER_ID)).thenReturn(Optional.empty());
-//
-//        assertThrows(BeerNotFoundException.class, () -> beerService.decrement(INVALID_BEER_ID, quantityToDecrement));
-//    }
 }

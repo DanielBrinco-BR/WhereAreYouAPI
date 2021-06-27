@@ -3,8 +3,7 @@ package com.whereareyou.service;
 import com.whereareyou.dto.PhoneDTO;
 import com.whereareyou.entity.Phone;
 import com.whereareyou.exception.PhoneAlreadyRegisteredException;
-import com.whereareyou.exception.PhonerNotFoundException;
-import com.whereareyou.exception.PhoneStockExceededException;
+import com.whereareyou.exception.PhoneNotFoundException;
 import com.whereareyou.mapper.PhoneMapper;
 import com.whereareyou.repository.PhoneRepository;
 import lombok.AllArgsConstructor;
@@ -23,16 +22,9 @@ public class PhoneService {
     private final PhoneMapper phoneMapper = PhoneMapper.INSTANCE;
 
     public PhoneDTO createPhone(PhoneDTO phoneDTO) throws PhoneAlreadyRegisteredException {
-        verifyIfIsAlreadyRegistered(phoneDTO.getNumber());
         Phone phone = phoneMapper.toModel(phoneDTO);
         Phone savedPhone = phoneRepository.save(phone);
         return phoneMapper.toDTO(savedPhone);
-    }
-
-    public PhoneDTO findByNumber(String number) throws PhonerNotFoundException {
-        Phone foundPhone = phoneRepository.findByNumber(number)
-                .orElseThrow(() -> new PhonerNotFoundException(number));
-        return phoneMapper.toDTO(foundPhone);
     }
 
     public List<PhoneDTO> listAll() {
@@ -42,20 +34,13 @@ public class PhoneService {
                 .collect(Collectors.toList());
     }
 
-    public void deleteById(Long id) throws PhonerNotFoundException {
+    public void deleteById(Long id) throws PhoneNotFoundException {
         verifyIfExists(id);
         phoneRepository.deleteById(id);
     }
 
-    private void verifyIfIsAlreadyRegistered(String name) throws PhoneAlreadyRegisteredException {
-        Optional<Phone> optSavedPhone = phoneRepository.findByNumber(name);
-        if (optSavedPhone.isPresent()) {
-            throw new PhoneAlreadyRegisteredException(name);
-        }
-    }
-
-    private Phone verifyIfExists(Long id) throws PhonerNotFoundException {
+    private Phone verifyIfExists(Long id) throws PhoneNotFoundException {
         return phoneRepository.findById(id)
-                .orElseThrow(() -> new PhonerNotFoundException(id));
+                .orElseThrow(() -> new PhoneNotFoundException(id));
     }
 }
