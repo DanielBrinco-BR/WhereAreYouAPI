@@ -1,16 +1,16 @@
 {
 	"variables": [],
 	"info": {
-		"name": "Beer API",
+		"name": "Phone API",
 		"_postman_id": "2310266f-1c5d-0bd8-e78f-39e9340d8f95",
 		"description": "",
 		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "List Beers",
+			"name": "List Phones",
 			"request": {
-				"url": "http://localhost:8080/api/v1/beers",
+				"url": "http://localhost:8080/api/v1/phones",
 				"method": "GET",
 				"header": [
 					{
@@ -25,9 +25,9 @@
 			"response": []
 		},
 		{
-			"name": "Create Beer",
+			"name": "Create Phone",
 			"request": {
-				"url": "http://localhost:8080/api/v1/beers",
+				"url": "http://localhost:8080/api/v1/phones",
 				"method": "POST",
 				"header": [
 					{
@@ -38,16 +38,16 @@
 				],
 				"body": {
 					"mode": "raw",
-					"raw": "{\n\t\"name\": \"Colorado appia\",\n\t\"brand\": \"Colorado\",\n\t\"max\": 20,\n\t\"quantity\": 10,\n\t\"type\": \"LAGER\"\n}"
+					"raw": "{\n\t\"name\": \"Test\",\n\t\"number\": \"5511999999999\",\n\}"
 				},
 				"description": ""
 			},
 			"response": []
 		},
 		{
-			"name": "Get beer by name",
+			"name": "Get phone by number",
 			"request": {
-				"url": "http://localhost:8080/api/v1/beers/Colorado appia",
+				"url": "http://localhost:8080/api/v1/phone/5511999999999",
 				"method": "GET",
 				"header": [],
 				"body": {},
@@ -56,9 +56,9 @@
 			"response": []
 		},
 		{
-			"name": "Delete beer by id",
+			"name": "Delete phone by id",
 			"request": {
-				"url": "http://localhost:8080/api/v1/beers/1",
+				"url": "http://localhost:8080/api/v1/phone/1",
 				"method": "DELETE",
 				"header": [
 					{
@@ -73,9 +73,9 @@
 			"response": []
 		},
 		{
-			"name": "Increment beer stock",
+			"name": "Increment phone numbers",
 			"request": {
-				"url": "http://localhost:8080/api/v1/beers/1/increment",
+				"url": "http://localhost:8080/api/v1/phone/1/increment",
 				"method": "PATCH",
 				"header": [
 					{
@@ -93,9 +93,9 @@
 			"response": []
 		},
 		{
-			"name": "Decrement beer stock",
+			"name": "Decrement phone numbers",
 			"request": {
-				"url": "http://localhost:8080/api/v1/beers/1/decrement",
+				"url": "http://localhost:8080/api/v1/phones/1/decrement",
 				"method": "PATCH",
 				"header": [
 					{
